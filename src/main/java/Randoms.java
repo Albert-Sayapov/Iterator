@@ -1,23 +1,14 @@
 import java.util.Iterator;
-import java.util.PrimitiveIterator;
 import java.util.Random;
 
 public class Randoms implements Iterable<Integer> {
-    protected PrimitiveIterator.OfInt random;
+    protected Random random = new Random();
     protected int min;
     protected int max;
 
     public Randoms(int min, int max) {
-        random = Randoms.randomRange(min, max);
         this.min = min;
         this.max = max;
-    }
-
-    public static PrimitiveIterator.OfInt randomRange(int min, int max) {
-        if (min >= max) {
-            throw new IllegalArgumentException("Минимальное значение не может быть больше максимального");
-        }
-        return new Random().ints(min, (max + 1)).iterator();
     }
 
     @Override
@@ -30,7 +21,10 @@ public class Randoms implements Iterable<Integer> {
 
             @Override
             public Integer next() {
-                return random.nextInt();
+                if (min >= max) {
+                    throw new IllegalArgumentException("Минимальное значение не может быть бльше максимального");
+                }
+                return random.nextInt((max - min) + 1) + min;
             }
         };
     }
